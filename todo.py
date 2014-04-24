@@ -1,3 +1,5 @@
+#! /usr/bin/python
+
 """
 Simple Todolist manager for the command line that allows you to view, add or mark tasks as complete
 """
