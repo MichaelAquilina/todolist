@@ -38,7 +38,7 @@ if __name__ == '__main__':
     path = '/home/michaela/todo.md'
 
     parser = argparse.ArgumentParser(description='Todo list manager')
-    parser.add_argument('-m', '--mark-complete', type=bool)
+    parser.add_argument('-m', '--mark-complete', type=int)
     parser.add_argument('-a', '--add-task', type=str)
 
     args = parser.parse_args()
@@ -54,7 +54,9 @@ if __name__ == '__main__':
 
         write_todo(tasks, path)
     elif args.mark_complete:
-        pass
+        del(tasks[args.mark_complete])
+
+        write_todo(tasks, path)
     else:
         for id, data in tasks.items():
             print '[%d] %s' % (id, data)
