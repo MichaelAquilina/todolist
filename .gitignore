@@ -1,0 +1,8 @@
+# Pycharm
+.idea
+
+# Linux
+*~
+
+# Python
+*.pyc
