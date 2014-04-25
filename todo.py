@@ -41,7 +41,7 @@ def read_todo(path):
 if __name__ == '__main__':
     import argparse
 
-    path = '/home/michaela/todo.md'
+    path = os.path.expanduser('~/todo.md')
 
     parser = argparse.ArgumentParser(description='Simple Todo list manager written in Python')
     parser.add_argument('-m', '--mark-complete', type=int)
