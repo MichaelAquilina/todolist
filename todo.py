@@ -5,6 +5,7 @@ Simple Todolist manager for the command line that allows you to view, add or mar
 """
 
 import re
+import os
 
 
 def write_todo(tasks, path):
@@ -16,8 +17,11 @@ def write_todo(tasks, path):
 def read_todo(path):
     """
     Parses the todo list in the given path and returns a dictionary of values
-    organised by their ID.
+    organised by their ID. Returns an empty dictionary if no todo list is available.
     """
+
+    if not os.path.exists(path):
+        return {}
 
     with open(path, 'r') as f:
         data = f.readlines()
@@ -39,7 +43,7 @@ if __name__ == '__main__':
 
     path = '/home/michaela/todo.md'
 
-    parser = argparse.ArgumentParser(description='Todo list manager')
+    parser = argparse.ArgumentParser(description='Simple Todo list manager written in Python')
     parser.add_argument('-m', '--mark-complete', type=int)
     parser.add_argument('-a', '--add-task', type=str)
 
