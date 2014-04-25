@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3m
 
 """
 Simple Todolist manager for the command line that allows you to view, add or mark tasks as complete
@@ -65,4 +65,4 @@ if __name__ == '__main__':
         write_todo(tasks, path)
     else:
         for id, data in tasks.items():
-            print '[%d] %s' % (id, data)
+            print('[%d] %s' % (id, data))
