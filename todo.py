@@ -6,11 +6,17 @@ Simple Todolist manager for the command line that allows you to view, add or mar
 
 import re
 import os
+import operator
+
+
+def sort_tasks(tasks):
+    return sorted(tasks.items(), key=operator.itemgetter(0))
 
 
 def write_todo(tasks, path):
+
     with open(path, 'w') as f:
-        for id, data in tasks.items():
+        for id, data in sort_tasks(tasks):
             f.write('[%d] %s\n' % (id, data))
 
 
@@ -64,5 +70,5 @@ if __name__ == '__main__':
 
         write_todo(tasks, path)
     else:
-        for id, data in tasks.items():
+        for id, data in sort_tasks(tasks):
             print('[%d] %s' % (id, data))
