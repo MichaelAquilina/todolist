@@ -86,6 +86,7 @@ if __name__ == '__main__':
         tasks = garbage_collect(tasks)
 
         write_todo(tasks, path)
-    else:
-        for id, data in sort_tasks(tasks):
-            print('[%d] %s' % (id, data))
+
+    # Always print the tasks at the end of an operation
+    for id, data in sort_tasks(tasks):
+        print('[%d] %s' % (id, data))
