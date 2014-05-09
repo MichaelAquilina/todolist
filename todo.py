@@ -9,6 +9,18 @@ import os
 import operator
 
 
+def garbage_collect(tasks):
+    """Performs garbage collection on tasks by removing fragmented IDs"""
+    gc_tasks = {}
+    counter = 1
+
+    for id, data in sort_tasks(tasks):
+        gc_tasks[counter] = data
+        counter += 1
+
+    return gc_tasks
+
+
 def sort_tasks(tasks):
     return sorted(tasks.items(), key=operator.itemgetter(0))
 
@@ -63,10 +75,15 @@ if __name__ == '__main__':
         count = max(tasks.keys())
 
         tasks[count + 1] = args.add_task
+        # Garbage collect any fragments
+        tasks = garbage_collect(tasks)
 
         write_todo(tasks, path)
     elif args.mark_complete:
         del(tasks[args.mark_complete])
+
+        # Garbage collect any fragments
+        tasks = garbage_collect(tasks)
 
         write_todo(tasks, path)
     else:
