@@ -80,6 +80,7 @@ if __name__ == '__main__':
 
         write_todo(tasks, path)
     elif args.mark_complete:
+        print('Marked task "%s" as complete' % tasks[args.mark_complete])
         del(tasks[args.mark_complete])
 
         # Garbage collect any fragments
