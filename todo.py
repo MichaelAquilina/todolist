@@ -9,33 +9,33 @@ import re
 import os
 
 
-def write_todo(tasks, path):
+def write_todo(task_list, file_path):
 
-    with open(path, 'w') as f:
-        for data in tasks:
-            f.write('* %s\n' % data)
+    with open(file_path, 'w') as f:
+        for task in task_list:
+            f.write('* %s\n' % task)
 
 
-def read_todo(path):
+def read_todo(file_path):
     """
     Parses the todo list in the given path and returns a dictionary of values
     organised by their ID. Returns an empty dictionary if no todo list is available.
     """
 
-    if not os.path.exists(path):
+    if not os.path.exists(file_path):
         return []
 
-    with open(path, 'r') as f:
+    with open(file_path, 'r') as f:
         data = f.readlines()
 
-    tasks = []
+    task_list = []
     for line in data:
         m = re.match(r'\* (?P<data>.*)', line)
         task_data = m.group('data')
 
-        tasks.append(task_data)
+        task_list.append(task_data)
 
-    return tasks
+    return task_list
 
 
 if __name__ == '__main__':
@@ -58,12 +58,12 @@ if __name__ == '__main__':
         write_todo(tasks, path)
     elif args.mark_complete:
 
-        for index in sorted(args.mark_complete, reverse=True):
-            print('Marking task "%s" as complete' % tasks[index])
-            del(tasks[index])
+        for task_index in sorted(args.mark_complete, reverse=True):
+            print('Marking task "%s" as complete' % tasks[task_index])
+            del(tasks[task_index])
 
         write_todo(tasks, path)
 
     # Always print the tasks at the end of an operation
-    for id, data in enumerate(tasks):
-        print('[%d] %s' % (id, data))
+    for index, data in enumerate(tasks):
+        print('[%d] %s' % (index, data))
