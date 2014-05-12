@@ -2,6 +2,7 @@
 
 """
 Simple Todolist manager for the command line that allows you to view, add or mark tasks as complete
+Author: Michael Aquilina 2014
 """
 
 import re
