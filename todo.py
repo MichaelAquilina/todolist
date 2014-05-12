@@ -6,30 +6,13 @@ Simple Todolist manager for the command line that allows you to view, add or mar
 
 import re
 import os
-import operator
-
-
-def garbage_collect(tasks):
-    """Performs garbage collection on tasks by removing fragmented IDs"""
-    gc_tasks = {}
-    counter = 1
-
-    for id, data in sort_tasks(tasks):
-        gc_tasks[counter] = data
-        counter += 1
-
-    return gc_tasks
-
-
-def sort_tasks(tasks):
-    return sorted(tasks.items(), key=operator.itemgetter(0))
 
 
 def write_todo(tasks, path):
 
     with open(path, 'w') as f:
-        for id, data in sort_tasks(tasks):
-            f.write('[%d] %s\n' % (id, data))
+        for data in tasks:
+            f.write('* %s\n' % data)
 
 
 def read_todo(path):
@@ -39,19 +22,17 @@ def read_todo(path):
     """
 
     if not os.path.exists(path):
-        return {}
+        return []
 
     with open(path, 'r') as f:
         data = f.readlines()
 
-    tasks = {}
+    tasks = []
     for line in data:
-        m = re.match(r'\[(?P<id>\d+)\] (?P<data>.*)', line)
-
-        task_id = int(m.group('id'))
+        m = re.match(r'\* (?P<data>.*)', line)
         task_data = m.group('data')
 
-        tasks[task_id] = task_data
+        tasks.append(task_data)
 
     return tasks
 
@@ -71,23 +52,15 @@ if __name__ == '__main__':
     tasks = read_todo(path)
 
     if args.add_task:
-        # Hack which should be changed in the future
-        count = max(tasks.keys())
-
-        tasks[count + 1] = args.add_task
-        # Garbage collect any fragments
-        tasks = garbage_collect(tasks)
+        tasks.append(args.add_task)
 
         write_todo(tasks, path)
     elif args.mark_complete:
         print('Marked task "%s" as complete' % tasks[args.mark_complete])
         del(tasks[args.mark_complete])
 
-        # Garbage collect any fragments
-        tasks = garbage_collect(tasks)
-
         write_todo(tasks, path)
 
     # Always print the tasks at the end of an operation
-    for id, data in sort_tasks(tasks):
+    for id, data in enumerate(tasks):
         print('[%d] %s' % (id, data))
