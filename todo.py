@@ -43,7 +43,7 @@ if __name__ == '__main__':
     path = os.path.expanduser('~/todo.md')
 
     parser = argparse.ArgumentParser(description='Simple Todo list manager written in Python')
-    parser.add_argument('-m', '--mark-complete', type=int)
+    parser.add_argument('-m', '--mark-complete', type=int, nargs='+')
     parser.add_argument('-a', '--add-task', type=str)
 
     args = parser.parse_args()
@@ -56,8 +56,10 @@ if __name__ == '__main__':
 
         write_todo(tasks, path)
     elif args.mark_complete:
-        print('Marked task "%s" as complete' % tasks[args.mark_complete])
-        del(tasks[args.mark_complete])
+
+        for index in sorted(args.mark_complete, reverse=True):
+            print('Marking task "%s" as complete' % tasks[index])
+            del(tasks[index])
 
         write_todo(tasks, path)
 
