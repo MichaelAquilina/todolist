@@ -83,7 +83,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Simple Todo list manager written in Python')
     parser.add_argument('section', default='default', nargs='?')
     parser.add_argument('-m', '--mark-complete', type=int, nargs='+')
-    parser.add_argument('-a', '--add-task', type=str)
+    parser.add_argument('-a', '--add-task', type=str, nargs='+')
 
     args = parser.parse_args()
 
@@ -103,7 +103,7 @@ if __name__ == '__main__':
         selected_tasks = tasks[selected_section]
 
         if args.add_task:
-            selected_tasks.append(args.add_task)
+            selected_tasks.append(' '.join(args.add_task))
             save = True
         elif args.mark_complete:
             for task_index in sorted(args.mark_complete, reverse=True):
