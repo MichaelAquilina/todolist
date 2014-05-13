@@ -9,12 +9,10 @@ import re
 import os
 
 # TODO: Cleanup code
-#       Don't show empty sections
 #       Convert to class
 #       Add color terminal support
 #       Better Error Handling
 #       Allow deleting and inserting at 'all' selection
-#       Allow creation of sections from command line
 
 
 def write_todo(task_list, file_path):
