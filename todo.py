@@ -33,7 +33,7 @@ def write_todo(task_list, file_path):
         # Grab the list of all other sections
         others = task_list.keys()
         for section in others:
-            if section != 'default':
+            if section != 'default' and len(task_list[section]) > 0:
                 f.write('\n')
                 f.write('>%s\n' % section)
                 for task in task_list[section]:
