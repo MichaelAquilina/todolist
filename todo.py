@@ -91,25 +91,34 @@ if __name__ == '__main__':
     selected_section = args.section.lower()
 
     tasks = read_todo(path)  # Full todo list
+    save = False             # Specifies if the todo list should be saved
 
     if selected_section == 'all':
         selected_tasks = itertools.chain(*tasks.values())
     else:
-        selected_tasks = tasks[selected_section]  # Specific section
+        # Create the section if it does not exist yet
+        if selected_section not in tasks:
+            tasks[selected_section] = []
+
+        selected_tasks = tasks[selected_section]
 
         if args.add_task:
             selected_tasks.append(args.add_task)
-
-            write_todo(tasks, path)
+            save = True
         elif args.mark_complete:
-
             for task_index in sorted(args.mark_complete, reverse=True):
-                print('Marking task "%s" as complete' % selected_tasks[task_index])
-                del(selected_tasks[task_index])
-
-            write_todo(tasks, path)
+                if task_index < len(selected_tasks):
+                    print('Marking task "%s" as complete' % selected_tasks[task_index])
+                    del(selected_tasks[task_index])
+                    save = True
+                else:
+                    print('Index does not exist: %d' % task_index)
 
     # Always print the tasks at the end of an operation
     print('Showing list: %s \t (available: %s)' % (selected_section, list(tasks.keys())))
     for index, data in enumerate(selected_tasks):
         print('[%d] %s' % (index, data))
+
+    # Only save if the flag has been set
+    if save:
+        write_todo(tasks, path)
