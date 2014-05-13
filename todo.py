@@ -13,6 +13,8 @@ import os
 #       Convert to class
 #       Add color terminal support
 #       Better Error Handling
+#       Allow deleting and inserting at 'all' selection
+#       Allow creation of sections from command line
 
 
 def write_todo(task_list, file_path):
@@ -74,6 +76,7 @@ def read_todo(file_path):
 
 if __name__ == '__main__':
     import argparse
+    import itertools
 
     path = os.path.expanduser('~/todo.md')
 
@@ -84,22 +87,29 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    # Retrieve the chosen section
+    selected_section = args.section.lower()
+
     tasks = read_todo(path)  # Full todo list
-    selected_tasks = tasks[args.section]  # Specific section
 
-    if args.add_task:
-        selected_tasks.append(args.add_task)
+    if selected_section == 'all':
+        selected_tasks = itertools.chain(*tasks.values())
+    else:
+        selected_tasks = tasks[selected_section]  # Specific section
 
-        write_todo(tasks, path)
-    elif args.mark_complete:
+        if args.add_task:
+            selected_tasks.append(args.add_task)
 
-        for task_index in sorted(args.mark_complete, reverse=True):
-            print('Marking task "%s" as complete' % selected_tasks[task_index])
-            del(selected_tasks[task_index])
+            write_todo(tasks, path)
+        elif args.mark_complete:
 
-        write_todo(tasks, path)
+            for task_index in sorted(args.mark_complete, reverse=True):
+                print('Marking task "%s" as complete' % selected_tasks[task_index])
+                del(selected_tasks[task_index])
+
+            write_todo(tasks, path)
 
     # Always print the tasks at the end of an operation
-    print('Showing list: %s \t (available: %s)' % (args.section, list(tasks.keys())))
+    print('Showing list: %s \t (available: %s)' % (selected_section, list(tasks.keys())))
     for index, data in enumerate(selected_tasks):
         print('[%d] %s' % (index, data))
