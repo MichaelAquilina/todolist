@@ -41,7 +41,7 @@ def write_todo(task_list, file_path):
 def read_todo(file_path):
     """
     Returns a dictionary of lists organised by their section. A 'default'
-    section is always available in the dictionary but does not garuantee the
+    section is always available in the dictionary but does not guarantee the
     list to have any contents
     """
 
