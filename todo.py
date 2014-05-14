@@ -74,7 +74,6 @@ def read_todo(file_path):
 
 if __name__ == '__main__':
     import argparse
-    import itertools
 
     path = os.path.expanduser('~/todo.md')
 
@@ -92,7 +91,15 @@ if __name__ == '__main__':
     save = False             # Specifies if the todo list should be saved
 
     if selected_section == 'all':
-        selected_tasks = itertools.chain(*tasks.values())
+        for index, task in enumerate(tasks['default']):
+            print('[%d] %s' % (index, task))
+
+        for section in tasks.keys():
+            if section != 'default':
+                print('>%s' % section)
+                for index, task in enumerate(tasks[section]):
+                    print('[%d] %s' % (index, task))
+
     else:
         # Create the section if it does not exist yet
         if selected_section not in tasks:
@@ -112,10 +119,10 @@ if __name__ == '__main__':
                 else:
                     print('Index does not exist: %d' % task_index)
 
-    # Always print the tasks at the end of an operation
-    print('Showing list: %s \t (available: %s)' % (selected_section, list(tasks.keys())))
-    for index, data in enumerate(selected_tasks):
-        print('[%d] %s' % (index, data))
+        # Always print the tasks at the end of an operation
+        print('Showing list: %s \t (available: %s)' % (selected_section, list(tasks.keys())))
+        for index, data in enumerate(selected_tasks):
+            print('[%d] %s' % (index, data))
 
     # Only save if the flag has been set
     if save:
