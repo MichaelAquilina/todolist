@@ -106,6 +106,22 @@ if __name__ == '__main__':
 
     # If all specified then show all sections
     if 'all' in args.sections:
-        args.sections = tasks.keys()
+        sections = tasks.keys()
+    else:
+        sections = args.sections
 
-    show_todo_list(tasks, args.sections)
+    if args.mark_complete:
+
+        if len(sections) > 1:
+            print('ERROR: Cannot mark task when specifying multiple sections')
+        else:
+            task_section = tasks[sections[0]]
+
+            for index in args.mark_complete:
+                target = task_section[index]
+                print('NOTE: Marked "%s" as complete' % target)
+                del task_section[index]
+
+            write_todo(tasks, todo_path)
+
+    show_todo_list(tasks, sections)
