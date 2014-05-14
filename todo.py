@@ -15,6 +15,21 @@ import os
 #       Allow deleting and inserting at 'all' selection
 
 
+def filter_tasks(task_list, sections):
+    """
+    Takes an input dictionary task list and a list of string sections
+    and returns a filtered task list containing only the sections
+    specified
+    """
+    filtered_tasks = {}
+    for section in sections:
+        filtered_tasks[section] = []
+        for task in task_list[section]:
+            filtered_tasks[section].append(task)
+
+    return filtered_tasks
+
+
 def write_todo(task_list, file_path):
     """
     Writes a todolist formatted dictionary to file for reading at a later stage.
@@ -75,55 +90,25 @@ def read_todo(file_path):
 if __name__ == '__main__':
     import argparse
 
-    path = os.path.expanduser('~/todo.md')
+    todo_path = os.path.expanduser('~/todo.md')
 
     parser = argparse.ArgumentParser(description='Simple Todo list manager written in Python')
-    parser.add_argument('section', default='default', nargs='?')
+    parser.add_argument('sections', default=['default'], nargs='*')
     parser.add_argument('-m', '--mark-complete', type=int, nargs='+')
     parser.add_argument('-a', '--add-task', type=str, nargs='+')
 
     args = parser.parse_args()
 
-    # Retrieve the chosen section
-    selected_section = args.section.lower()
+    # Begin Processing Here
+    tasks = read_todo(todo_path)
+    if args.sections == ['all']:
+        args.sections = tasks.keys()
 
-    tasks = read_todo(path)  # Full todo list
-    save = False             # Specifies if the todo list should be saved
+    tasks = filter_tasks(tasks, args.sections)
 
-    if selected_section == 'all':
-        for index, task in enumerate(tasks['default']):
+    # Follow the order specified in the command line
+    for section in args.sections:
+        print('>%s' % section)
+        for index, task in enumerate(tasks[section]):
             print('[%d] %s' % (index, task))
 
-        for section in tasks.keys():
-            if section != 'default':
-                print('>%s' % section)
-                for index, task in enumerate(tasks[section]):
-                    print('[%d] %s' % (index, task))
-
-    else:
-        # Create the section if it does not exist yet
-        if selected_section not in tasks:
-            tasks[selected_section] = []
-
-        selected_tasks = tasks[selected_section]
-
-        if args.add_task:
-            selected_tasks.append(' '.join(args.add_task))
-            save = True
-        elif args.mark_complete:
-            for task_index in sorted(args.mark_complete, reverse=True):
-                if task_index < len(selected_tasks):
-                    print('Marking task "%s" as complete' % selected_tasks[task_index])
-                    del(selected_tasks[task_index])
-                    save = True
-                else:
-                    print('Index does not exist: %d' % task_index)
-
-        # Always print the tasks at the end of an operation
-        print('Showing list: %s \t (available: %s)' % (selected_section, list(tasks.keys())))
-        for index, data in enumerate(selected_tasks):
-            print('[%d] %s' % (index, data))
-
-    # Only save if the flag has been set
-    if save:
-        write_todo(tasks, path)
