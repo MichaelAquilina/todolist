@@ -123,5 +123,13 @@ if __name__ == '__main__':
                 del task_section[index]
 
             write_todo(tasks, todo_path)
+    elif args.add_task:
+        if len(sections) > 1:
+            print('ERROR: Cannot add task when specifying multiple sections')
+        else:
+            task_section = tasks[sections[0]]
+            task_section.append(' '.join(args.add_task))
+
+            write_todo(tasks, todo_path)
 
     show_todo_list(tasks, sections)
