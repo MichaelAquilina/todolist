@@ -15,19 +15,21 @@ import os
 #       Allow deleting and inserting at 'all' selection
 
 
-def filter_tasks(task_list, sections):
-    """
-    Takes an input dictionary task list and a list of string sections
-    and returns a filtered task list containing only the sections
-    specified
-    """
-    filtered_tasks = {}
-    for section in sections:
-        filtered_tasks[section] = []
-        for task in task_list[section]:
-            filtered_tasks[section].append(task)
+def show_todo_list(tasks, sections):
 
-    return filtered_tasks
+    def show_section(section):
+        for index, task in enumerate(tasks[section]):
+            print('[%d] %s' % (index, task))
+
+    # Always display default first and don't show a heading
+    if 'default' in sections:
+        show_section('default')
+
+    # Follow the order specified in the command line
+    for section in sections:
+        if section != 'default':
+            print('> %s' % section)
+            show_section(section)
 
 
 def write_todo(task_list, file_path):
@@ -101,14 +103,9 @@ if __name__ == '__main__':
 
     # Begin Processing Here
     tasks = read_todo(todo_path)
-    if args.sections == ['all']:
+
+    # If all specified then show all sections
+    if 'all' in args.sections:
         args.sections = tasks.keys()
 
-    tasks = filter_tasks(tasks, args.sections)
-
-    # Follow the order specified in the command line
-    for section in args.sections:
-        print('>%s' % section)
-        for index, task in enumerate(tasks[section]):
-            print('[%d] %s' % (index, task))
-
+    show_todo_list(tasks, args.sections)
