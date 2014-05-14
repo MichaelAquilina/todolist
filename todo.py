@@ -118,9 +118,12 @@ if __name__ == '__main__':
             task_section = tasks[sections[0]]
 
             for index in args.mark_complete:
-                target = task_section[index]
-                print('NOTE: Marked "%s" as complete' % target)
-                del task_section[index]
+                if index < len(task_section):
+                    target = task_section[index]
+                    print('NOTE: Marked "%s" as complete' % target)
+                    del task_section[index]
+                else:
+                    print('ERROR: Invalid Index specified for "%s"' % sections[0])
 
             write_todo(tasks, todo_path)
     elif args.add_task:
