@@ -15,10 +15,10 @@ import os
 #       Allow deleting and inserting at 'all' selection
 
 
-def show_todo_list(tasks, sections):
+def show_todo_list(task_list, sections):
 
     def show_section(section):
-        for index, task in enumerate(tasks[section]):
+        for index, task in enumerate(task_list[section]):
             print('[%d] %s' % (index, task))
 
     # Always display default first and don't show a heading
@@ -110,8 +110,8 @@ if __name__ == '__main__':
     else:
         sections = args.sections
 
+    # Command Line Options
     if args.mark_complete:
-
         if len(sections) > 1:
             print('ERROR: Cannot mark task when specifying multiple sections')
         else:
