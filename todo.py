@@ -94,8 +94,8 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Simple Todo list manager written in Python')
     parser.add_argument('sections', default=['default'], nargs='*')
-    parser.add_argument('-m', '--mark-complete', type=int, nargs='+')
-    parser.add_argument('-a', '--add-task', type=str, nargs='+')
+    parser.add_argument('-m', '--mark-complete', type=int, nargs='+', help='Marks a specified task as complete')
+    parser.add_argument('-a', '--add-task', type=str, nargs='+', help='Adds a task to a todo list')
 
     args = parser.parse_args()
 
