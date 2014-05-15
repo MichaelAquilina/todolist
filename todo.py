@@ -130,6 +130,9 @@ if __name__ == '__main__':
         if len(sections) > 1:
             print('ERROR: Cannot add task when specifying multiple sections')
         else:
+            if sections[0] not in tasks:
+                tasks[sections[0]] = []
+
             task_section = tasks[sections[0]]
             task_section.append(' '.join(args.add_task))
 
