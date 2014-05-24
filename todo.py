@@ -18,7 +18,7 @@ import os
 def show_todo_list(task_list, sections):
 
     def show_section(section):
-        for index, task in enumerate(task_list[section]):
+        for index, task in enumerate(task_list.get(section, [])):
             print('[%d] %s' % (index, task))
 
     # Always display default first and don't show a heading
