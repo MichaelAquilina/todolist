@@ -98,6 +98,7 @@ if __name__ == '__main__':
     parser.add_argument('sections', default=['default'], nargs='*')
     parser.add_argument('-m', '--mark-complete', type=int, nargs='+', help='Marks a specified task as complete')
     parser.add_argument('-a', '--add-task', type=str, nargs='+', help='Adds a task to a todo list')
+    parser.add_argument('-d', '--delete', action='store_true', help='Deletes the section specified')
 
     args = parser.parse_args()
 
@@ -137,5 +138,16 @@ if __name__ == '__main__':
             task_section.append(' '.join(args.add_task))
 
             write_todo(tasks, todo_path)
+    elif args.delete:
+        if 'all' in args.sections:
+            print('ERROR: Cannot delete all!')
+        else:
+            print('Deleted sections: %s' % sections)
+
+            for i in range(len(sections)):
+                del tasks[sections[i]]
+
+            write_todo(tasks, todo_path)
+            sections = ['default']
 
     show_todo_list(tasks, sections)
