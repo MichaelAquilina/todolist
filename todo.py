@@ -150,5 +150,5 @@ if __name__ == '__main__':
             write_todo(tasks, todo_path)
             sections = ['default']
 
-    print('Available: %s' % list(tasks.keys()))
+    print('Available: %s' % sorted(list(tasks.keys())))
     show_todo_list(tasks, sections)
