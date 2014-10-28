@@ -8,6 +8,8 @@ Author: Michael Aquilina 2014
 import re
 import os
 
+from collections import defaultdict
+
 # TODO: Cleanup code
 #       Convert to class
 #       Add color terminal support
@@ -62,7 +64,7 @@ def read_todo(file_path):
     list to have any contents
     """
 
-    task_list = {'default': []}
+    task_list = defaultdict(list)
     if not os.path.exists(file_path):
         return task_list
 
@@ -105,9 +107,9 @@ if __name__ == '__main__':
     # Begin Processing Here
     tasks = read_todo(todo_path)
 
-    # If all specified then show all sections
+    # If all specified then show all sections except completed
     if 'all' in args.sections:
-        sections = tasks.keys()
+        sections = set(tasks.keys()) - {'completed'}
     else:
         sections = args.sections
 
@@ -122,6 +124,7 @@ if __name__ == '__main__':
                 if index < len(task_section):
                     target = task_section[index]
                     print('NOTE: Marked "%s" as complete' % target)
+                    tasks['completed'].append(task_section[index])
                     del task_section[index]
                 else:
                     print('ERROR: Invalid Index specified for "%s"' % sections[0])
@@ -131,9 +134,6 @@ if __name__ == '__main__':
         if len(sections) > 1:
             print('ERROR: Cannot add task when specifying multiple sections')
         else:
-            if sections[0] not in tasks:
-                tasks[sections[0]] = []
-
             task_section = tasks[sections[0]]
             task_section.append(' '.join(args.add_task))
 
