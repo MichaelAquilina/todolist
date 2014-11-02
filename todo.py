@@ -90,20 +90,7 @@ def read_todo(file_path):
 
     return task_list
 
-
-if __name__ == '__main__':
-    import argparse
-
-    todo_path = os.path.expanduser('~/todo.md')
-
-    parser = argparse.ArgumentParser(description='Simple Todo list manager written in Python')
-    parser.add_argument('sections', default=['default'], nargs='*')
-    parser.add_argument('-m', '--mark-complete', type=int, nargs='+', help='Marks a specified task as complete')
-    parser.add_argument('-a', '--add-task', type=str, nargs='+', help='Adds a task to a todo list')
-    parser.add_argument('-d', '--delete', action='store_true', help='Deletes the section specified')
-
-    args = parser.parse_args()
-
+def main(args):
     # Begin Processing Here
     tasks = read_todo(todo_path)
 
@@ -112,6 +99,10 @@ if __name__ == '__main__':
         sections = set(tasks.keys()) - {'completed'}
     else:
         sections = args.sections
+
+    if args.list:
+        print(' '.join(tasks.keys()))
+        return
 
     # Command Line Options
     if args.mark_complete:
@@ -152,3 +143,18 @@ if __name__ == '__main__':
 
     print('Available: %s' % sorted(list(tasks.keys())))
     show_todo_list(tasks, sections)
+
+
+if __name__ == '__main__':
+    import argparse
+
+    todo_path = os.path.expanduser('~/todo.md')
+
+    parser = argparse.ArgumentParser(description='Simple Todo list manager written in Python')
+    parser.add_argument('sections', default=['default'], nargs='*')
+    parser.add_argument('-m', '--mark-complete', type=int, nargs='+', help='Marks a specified task as complete')
+    parser.add_argument('-a', '--add-task', type=str, nargs='+', help='Adds a task to a todo list')
+    parser.add_argument('-d', '--delete', action='store_true', help='Deletes the section specified')
+    parser.add_argument('-l', '--list', action='store_true', help='List available sections')
+
+    main(parser.parse_args())
