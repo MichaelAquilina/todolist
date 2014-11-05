@@ -100,6 +100,12 @@ def main(args):
     else:
         sections = args.sections
 
+    if args.edit:
+        import subprocess
+        editor = os.environ.get('EDITOR', 'vim')
+        subprocess.call([editor, todo_path])
+        return
+
     if args.list:
         print(' '.join(tasks.keys()))
         return
@@ -156,5 +162,6 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--add-task', type=str, nargs='+', help='Adds a task to a todo list')
     parser.add_argument('-d', '--delete', action='store_true', help='Deletes the section specified')
     parser.add_argument('-l', '--list', action='store_true', help='List available sections')
+    parser.add_argument('-e', '--edit', action='store_true', help='Edit the todo list with your default editor')
 
     main(parser.parse_args())
