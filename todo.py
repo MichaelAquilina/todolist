@@ -90,6 +90,7 @@ def read_todo(file_path):
 
     return task_list
 
+
 def main(args):
     # Begin Processing Here
     tasks = read_todo(todo_path)
@@ -122,10 +123,11 @@ def main(args):
                     target = task_section[index]
                     print('NOTE: Marked "%s" as complete' % target)
                     tasks['completed'].append(task_section[index])
-                    del task_section[index]
+                    task_section[index] = None
                 else:
                     print('ERROR: Invalid Index specified for "%s"' % sections[0])
 
+            tasks[sections[0]] = [task for task in task_section if task is not None]
             write_todo(tasks, todo_path)
     elif args.add_task:
         if len(sections) > 1:
